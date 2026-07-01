@@ -14,7 +14,7 @@ client = OpenAI(
 )
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("سلام! من مشاور تحصیلی هنرستانی‌ها هستم. 🎓\nهر سوالی داری بپرس!")
+    await update.message.reply_text("سلام!امیدوارم حالت خوب باشه، من مشاور تحصیلی هنرستانی‌ها هستم. 🎓\nهر سوالی داری بپرس!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_msg = update.message.text
