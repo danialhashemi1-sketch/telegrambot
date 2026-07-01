@@ -33,7 +33,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await update.message.reply_text(response.choices[0].message.content)
     except Exception as e:
-        await update.message.reply_text(f"❗ یه مشکل فنی پیش اومد: {e}")
+        # این خطا را کامل به کاربر نشان بده
+        await update.message.reply_text(f"❗ خطا: {str(e)}")
 
 def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
