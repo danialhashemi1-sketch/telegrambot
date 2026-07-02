@@ -3,7 +3,7 @@ from flask import Flask
 import threading
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-import openai  # تغییر این خط
+import openai
 
 TELEGRAM_TOKEN = "8912433446:AAE23hrQ_EPtSN9upNzQ0xTHLobIDNE2AVs"
 OPENROUTER_API_KEY = "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"
