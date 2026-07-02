@@ -45,7 +45,7 @@ def health_check():
 
 def run_flask():
     # فلاسک روی پورت 8080 اجرا می‌شود تا رندر سرویس را لایو نگه دارد
-    app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=10000, debug=False, use_reloader=False)
 
 async def main():
     bot_app = Application.builder().token(TELEGRAM_TOKEN).build()
