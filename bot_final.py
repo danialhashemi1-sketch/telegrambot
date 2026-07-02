@@ -8,9 +8,11 @@ from openai import OpenAI
 TELEGRAM_TOKEN = "8912433446:AAE23hrQ_EPtSN9upNzQ0xTHLobIDNE2AVs"
 OPENROUTER_API_KEY = "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"
 
+from openai import OpenAI
+
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=OPENROUTER_API_KEY,
+    api_key=OPENROUTER_API_KEY
 )
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
