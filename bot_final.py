@@ -1,4 +1,5 @@
 import os
+import asyncio
 from flask import Flask
 import threading
 from telegram import Update
@@ -23,7 +24,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     try:
-        # استفاده از متد کلاسیک که در تمام نسخه‌ها بدون خطا کار می‌کند
         response = openai.ChatCompletion.create(
             model="openrouter/free",
             messages=[
@@ -36,14 +36,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"❗ خطا: {str(e)}")
 
-def main():
-    app = Application.builder().token(TELEGRAM_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    
-    print("✅ ربات روشن شد...")
-    app.run_polling()
-
 app = Flask(__name__)
 
 @app.route('/')
@@ -53,8 +45,25 @@ def health_check():
 def run_flask():
     app.run(host='0.0.0.0', port=8080)
 
+async def main():
+    # ساخت اپلیکیشن تلگرام
+    bot_app = Application.builder().token(TELEGRAM_TOKEN).build()
+    bot_app.add_handler(CommandHandler("start", start))
+    bot_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    
+    # راه‌اندازی گام به گام ساختار ناهمگام برای جلوگیری از ارور event loop
+    await bot_app.initialize()
+    await bot_app.updater.start_polling()
+    await bot_app.start()
+    print("✅ ربات تلگرام با موفقیت روشن شد...")
+    
+    # زنده نگه‌داشتن تسک به صورت بی‌انتها
+    while True:
+        await asyncio.sleep(3600)
+
 if __name__ == "__main__":
-    # اجرای فلاسک در یک ترد جداگانه
-    threading.Thread(target=run_flask).start()
-    # اجرای ربات تلگرام
-    main()
+    # ۱. اجرای فلاسک در یک ترد جداگانه جهت تایید سلامت رندر
+    threading.Thread(target=run_flask, daemon=True).start()
+    
+    # ۲. اجرای ربات تلگرام با یک حلقه رویداد تمیز و جدید
+    asyncio.run(main())
